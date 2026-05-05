@@ -33,7 +33,7 @@ projeto-organizacao-relatorios/
       js/
       assets/
   database/
-    001_estrutura_inicial.sql
+    AlterTable_001.sql
 ```
 
 ## Banco de dados
@@ -43,7 +43,7 @@ O projeto usa PostgreSQL.
 Execute o script:
 
 ```bash
-psql -U seu_usuario -d seu_banco -f database/001_estrutura_inicial.sql
+psql -U seu_usuario -d seu_banco -f database/AlterTable_001.sql
 ```
 
 O script cria/ajusta:
@@ -55,11 +55,24 @@ O backend espera que a tabela `tusuarios` tenha pelo menos:
 
 - `controle`
 - `usuario`
-- `senha`
 - `nome`
 - `nivel`
 - `programador`
 - `ativo`
+- `senha`
+
+Sua tabela original possui:
+
+- `controle`
+- `usuario`
+- `nome`
+- `programador`
+- `nivel`
+- `datahoracadastro`
+- `ativo`
+- `dataemissao`
+
+O script de banco preserva esse formato e adiciona `senha`, porque o backend precisa dela para autenticar e salvar o hash bcrypt no primeiro acesso.
 
 As tabelas de solicitacoes e historico ainda nao fazem parte do banco atual. Elas serao criadas depois, quando a tela do tecnico e o fluxo de kanban forem implementados.
 
