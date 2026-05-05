@@ -1,0 +1,415 @@
+:root {
+  --bg: #f4f7fb;
+  --panel: #ffffff;
+  --ink: #172033;
+  --muted: #687384;
+  --line: #d9e0ea;
+  --brand: #0d6b8f;
+  --brand-dark: #084761;
+  --brand-soft: #e6f5fa;
+  --accent: #2fb579;
+  --danger: #b42318;
+  --danger-bg: #fff1f0;
+  --success: #176b45;
+  --shadow: 0 24px 70px rgba(20, 35, 55, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(420px, 1.08fr) minmax(420px, 0.92fr);
+  color: var(--ink);
+  background:
+    linear-gradient(120deg, rgba(13, 107, 143, 0.08), transparent 42%),
+    var(--bg);
+  font-family: "DM Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.painel-logo {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 56px;
+  background:
+    linear-gradient(145deg, rgba(8, 71, 97, 0.96), rgba(13, 107, 143, 0.9)),
+    #084761;
+  color: #ffffff;
+}
+
+.logo-wrapper {
+  width: min(100%, 560px);
+}
+
+.logo-wrapper img {
+  width: min(250px, 70vw);
+  height: auto;
+  display: block;
+  margin-bottom: 42px;
+  filter: drop-shadow(0 16px 28px rgba(0, 0, 0, 0.22));
+}
+
+.logo-placeholder {
+  width: 88px;
+  height: 88px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 42px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.linha-decorativa {
+  width: 72px;
+  height: 4px;
+  margin-bottom: 30px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+.logo-wrapper h1 {
+  max-width: 560px;
+  margin: 0;
+  font-family: "DM Serif Display", Georgia, serif;
+  font-size: clamp(2.7rem, 5vw, 5.2rem);
+  line-height: 0.98;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.logo-wrapper h1 em {
+  color: #8ee0bd;
+  font-style: italic;
+}
+
+.logo-wrapper p {
+  max-width: 470px;
+  margin: 24px 0 0;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 1.06rem;
+  line-height: 1.7;
+}
+
+.painel-login {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 44px;
+}
+
+.card-login {
+  width: min(100%, 430px);
+  margin: auto;
+  padding: 40px;
+  border: 1px solid rgba(217, 224, 234, 0.86);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: var(--shadow);
+}
+
+.card-login header {
+  margin-bottom: 32px;
+}
+
+.saudacao {
+  margin: 0 0 8px;
+  color: var(--brand);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.card-login h2 {
+  margin: 0;
+  font-size: 2rem;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.loginForm {
+  display: grid;
+  gap: 20px;
+}
+
+.campo {
+  display: grid;
+  gap: 8px;
+}
+
+.campo label {
+  color: #2f3b4d;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.campo input {
+  width: 100%;
+  height: 48px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  outline: none;
+  padding: 0 14px;
+  color: var(--ink);
+  background: #fbfdff;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+}
+
+.campo input::placeholder {
+  color: #9aa5b4;
+}
+
+.campo input:focus {
+  border-color: var(--brand);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(13, 107, 143, 0.14);
+}
+
+.campo.erro input {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 4px rgba(180, 35, 24, 0.1);
+}
+
+.campo-senha {
+  position: relative;
+}
+
+.campo-senha input {
+  padding-right: 52px;
+}
+
+.toggle-senha {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 8px;
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+  transition: color 0.16s ease, background 0.16s ease;
+  transform: translateY(-50%);
+}
+
+.toggle-senha:hover,
+.toggle-senha:focus-visible {
+  color: var(--brand);
+  background: var(--brand-soft);
+  outline: none;
+}
+
+.toggle-senha svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.btn-logar {
+  height: 50px;
+  margin-top: 4px;
+  border: 0;
+  border-radius: 8px;
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 14px 28px rgba(13, 107, 143, 0.22);
+  transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
+}
+
+.btn-logar:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 34px rgba(13, 107, 143, 0.28);
+}
+
+.btn-logar:focus-visible {
+  outline: 4px solid rgba(13, 107, 143, 0.2);
+  outline-offset: 3px;
+}
+
+.btn-logar.carregando,
+.btn-logar:disabled {
+  cursor: wait;
+  filter: saturate(0.8);
+  opacity: 0.82;
+  transform: none;
+}
+
+.erro-msg {
+  display: none;
+  min-height: 42px;
+  align-items: center;
+  padding: 11px 13px;
+  border: 1px solid rgba(180, 35, 24, 0.2);
+  border-radius: 8px;
+  color: var(--danger);
+  background: var(--danger-bg);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.erro-msg.visivel {
+  display: flex;
+}
+
+.erro-msg.sucesso {
+  border-color: rgba(23, 107, 69, 0.2);
+  color: var(--success);
+  background: #edfdf4;
+}
+
+.card-login footer {
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.copyright {
+  width: min(100%, 430px);
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+.card-definir-senha {
+  width: min(100%, 450px);
+}
+
+.forca-senha {
+  display: grid;
+  gap: 8px;
+  margin-top: -6px;
+}
+
+.forca-barra {
+  width: 100%;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #edf1f6;
+}
+
+.forca-barra span {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--line);
+  transition: width 0.18s ease, background 0.18s ease;
+}
+
+.forca-barra span.fraca {
+  width: 28%;
+  background: #d92d20;
+}
+
+.forca-barra span.media {
+  width: 52%;
+  background: #d9822b;
+}
+
+.forca-barra span.boa {
+  width: 76%;
+  background: #0d6b8f;
+}
+
+.forca-barra span.forte {
+  width: 100%;
+  background: var(--accent);
+}
+
+.forca-senha > span {
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+@media (max-width: 920px) {
+  body {
+    grid-template-columns: 1fr;
+  }
+
+  .painel-logo {
+    min-height: auto;
+    padding: 42px 24px 36px;
+    justify-content: flex-start;
+  }
+
+  .logo-wrapper img {
+    width: 180px;
+    margin-bottom: 28px;
+  }
+
+  .linha-decorativa {
+    margin-bottom: 22px;
+  }
+
+  .logo-wrapper h1 {
+    max-width: 680px;
+    font-size: clamp(2.3rem, 11vw, 4rem);
+  }
+
+  .logo-wrapper p {
+    max-width: 620px;
+    margin-top: 18px;
+  }
+
+  .painel-login {
+    min-height: auto;
+    padding: 28px 20px 32px;
+  }
+
+  .card-login {
+    padding: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .painel-logo {
+    padding: 34px 18px 28px;
+  }
+
+  .painel-login {
+    padding: 20px 14px 28px;
+  }
+
+  .card-login {
+    padding: 22px;
+  }
+
+  .card-login h2 {
+    font-size: 1.65rem;
+  }
+}

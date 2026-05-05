@@ -1,25 +1,105 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Defina a sua Senha</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Definir Senha | SGBR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/login.css">
 </head>
-<body>
-    <section class="boxForm">
-        <div class="campoFormSenha">
-            <label for="novaSenha">Senha</label>
-            <input type="password" id="novaSenha" name="novaSenha" class="campoForm" minlength="6" required>
+<body class="pagina-definir-senha">
+  <section class="painel-logo" aria-label="Identidade da empresa">
+    <div class="logo-wrapper">
+      <img
+        src="assets/logo-sgbr.png"
+        alt="Logo SGBR"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+      >
+      <div class="logo-placeholder" style="display:none;">SG</div>
+
+      <div class="linha-decorativa"></div>
+
+      <h1>Crie sua <em>senha</em></h1>
+    </div>
+  </section>
+
+  <aside class="painel-login" aria-label="Formulário de definição de senha">
+    <div class="card-login card-definir-senha" role="main">
+      <header>
+        <p class="saudacao">Primeiro acesso</p>
+        <h2>Defina sua senha</h2>
+      </header>
+
+      <form class="loginForm" id="definirSenhaForm" method="POST" action="http://localhost:3001/api/auth/definir_senha" novalidate>
+        <div class="campo">
+          <label for="novaSenha">Nova senha</label>
+          <div class="campo-senha">
+            <input
+              type="password"
+              id="novaSenha"
+              name="senha"
+              placeholder="••••••••"
+              minlength="6"
+              maxlength="128"
+              autocomplete="new-password"
+              required
+            >
+            <button type="button" class="toggle-senha" data-target="novaSenha" aria-label="Mostrar senha">
+              <svg viewBox="0 0 24 24">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
         </div>
 
-        <div class="campoFormSenha">
-            <label for="confirmar_senha">Confirmar Nova Senha</label>
-            <input type="password" id="confirmarSenha" name="confirmarSenha" class="campoForm" minlength="6" required>
+        <div class="forca-senha" aria-live="polite">
+          <div class="forca-barra">
+            <span id="forcaIndicador"></span>
+          </div>
+          <span id="forcaTexto">Use pelo menos 6 caracteres.</span>
         </div>
 
-        <button class="cadastrarSenha" type="submit">Redefinir Senha</button>
-    </section>
+        <div class="campo">
+          <label for="confirmarSenha">Confirmar nova senha</label>
+          <div class="campo-senha">
+            <input
+              type="password"
+              id="confirmarSenha"
+              name="confirmarSenha"
+              placeholder="••••••••"
+              minlength="6"
+              maxlength="128"
+              autocomplete="new-password"
+              required
+            >
+            <button type="button" class="toggle-senha" data-target="confirmarSenha" aria-label="Mostrar senha">
+              <svg viewBox="0 0 24 24">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+        </div>
 
-    <script src="js/definirSenha.js"></script>
+        <button class="btn-logar" id="btnDefinirSenha" type="submit">Salvar senha</button>
+
+        <div class="erro-msg" id="senhaMsg" role="alert">
+          Preencha os campos para continuar.
+        </div>
+      </form>
+
+      <footer>
+        <span>Após salvar, você voltará para a tela de login.</span>
+      </footer>
+    </div>
+
+    <p class="copyright">© 2026 Powered by Brendan Eich / Piccoli</p>
+  </aside>
+
+  <script src="js/definirSenha.js"></script>
+  <div id="root" hidden></div>
 </body>
 </html>

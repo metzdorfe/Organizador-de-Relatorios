@@ -1,70 +1,164 @@
-# Getting Started with Create React App
+# Projeto Organização de Relatórios
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Sistema interno para abertura e acompanhamento de solicitações de relatórios.
 
-## Available Scripts
+O projeto possui duas partes:
 
-In the project directory, you can run:
+- `node/`: backend Node.js com Express, PostgreSQL, autenticação e cookies seguros.
+- `react/`: frontend servido pelo Create React App. As telas atuais estão em `react/public`.
 
-### `npm start`
+## Requisitos
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Node.js instalado
+- npm instalado
+- PostgreSQL instalado e rodando
+- Um banco criado para o projeto
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Estrutura
 
-### `npm test`
+```txt
+projeto-organizacao-relatorios/
+  node/
+    server.js
+    src/
+      config/db.js
+      controllers/
+      middlewares/
+      routes/
+  react/
+    public/
+      index.html
+      definirSenha.html
+      css/
+      js/
+      assets/
+  database/
+    001_estrutura_inicial.sql
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Banco de dados
 
-### `npm run build`
+O projeto usa PostgreSQL.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Execute o script:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+psql -U seu_usuario -d seu_banco -f database/001_estrutura_inicial.sql
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+O script cria/ajusta:
 
-### `npm run eject`
+- tabela `tusuarios`
+- constraints e indices basicos
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+O backend espera que a tabela `tusuarios` tenha pelo menos:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- `controle`
+- `usuario`
+- `senha`
+- `nome`
+- `nivel`
+- `programador`
+- `ativo`
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+As tabelas de solicitacoes e historico ainda nao fazem parte do banco atual. Elas serao criadas depois, quando a tela do tecnico e o fluxo de kanban forem implementados.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Variaveis de ambiente
 
-## Learn More
+Crie o arquivo `node/.env` baseado em `node/.env.example`:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=sua_senha
+DB_NAME=projeto_organizacao_relatorios
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+JWT_SECRET=troque_por_um_segredo_forte
+COOKIE_SECRET=troque_por_outro_segredo_forte
+PORT=3001
+FRONTEND_URL=http://localhost:3000
+LOGIN_SUCCESS_REDIRECT=http://localhost:3000/
+NODE_ENV=development
+```
 
-### Code Splitting
+Nunca suba `.env` para o Git.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Instalação em outro PC
 
-### Analyzing the Bundle Size
+Na raiz do projeto:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```bash
+cd node
+npm install
+```
 
-### Making a Progressive Web App
+Depois:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```bash
+cd ../react
+npm install
+```
 
-### Advanced Configuration
+## Rodar o backend
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Em um terminal:
 
-### Deployment
+```bash
+cd node
+npm start
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+O backend roda em:
 
-### `npm run build` fails to minify
+```txt
+http://localhost:3001
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Rodar o frontend
+
+Em outro terminal:
+
+```bash
+cd react
+npm start
+```
+
+O frontend roda em:
+
+```txt
+http://localhost:3000
+```
+
+## Telas atuais
+
+- Login: `http://localhost:3000/`
+- Definir senha: `http://localhost:3000/definirSenha.html`
+
+## Fluxo de login
+
+1. O usuario envia o formulario de login para `POST /api/auth/`.
+2. O backend valida o usuario no PostgreSQL.
+3. Se a senha ainda estiver em texto puro, o sistema trata como primeiro acesso.
+4. No primeiro acesso, o backend cria um cookie assinado temporario e redireciona para `definirSenha.html`.
+5. Ao definir a senha, o backend salva o hash com `bcrypt`.
+6. No login normal, o backend cria um JWT em cookie `HttpOnly`.
+
+## Regras de seguranca ja aplicadas
+
+- Login sem `fetch` no frontend.
+- Token nao fica em `localStorage` nem `sessionStorage`.
+- JWT fica em cookie `HttpOnly`.
+- Primeiro acesso usa cookie assinado temporario.
+- SQL usa parametros `$1`, `$2`, evitando SQL Injection.
+- Campo `usuario` aceita apenas letras, numeros, `_` e `.`.
+- Mensagens no frontend usam `textContent`, nao `innerHTML`.
+- `helmet` ativo no backend.
+- Rate limit no login: 5 tentativas a cada 15 minutos.
+
+## Observacoes importantes
+
+- A pasta `react/build/` e gerada pelo build e nao deve ser editada.
+- A pasta `node_modules/` nao deve ser versionada.
+- O desenvolvimento atual esta usando HTML/CSS/JS dentro de `react/public`.
+- A migracao para componentes React pode ser feita depois, quando o fluxo principal estiver fechado.

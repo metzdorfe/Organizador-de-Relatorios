@@ -3,8 +3,46 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
+
+const cookieOptions = {
+  httpOnly: true,
+  sameSite: 'lax',
+  secure: process.env.NODE_ENV === 'production',
+};
+
+const sanitize = (str) =>
+  typeof str === 'string' ? str.replace(/<[^>]*>/g, '').trim() : '';
+
+const usuarioPermitido = /^[A-Za-z0-9_.]+$/;
+
+const redirectLogin = (res, motivo) => {
+  const query = motivo ? `?erro=${encodeURIComponent(motivo)}` : '';
+  return res.redirect(`${FRONTEND_URL}/${query}`);
+};
+
 const login = async (req, res) => {
-  const { usuario, senha } = req.body;
+  let { usuario, senha } = req.body;
+
+  if (!usuario || !senha) {
+    return redirectLogin(res, 'Usuario e senha sao obrigatorios.');
+  }
+
+  usuario = sanitize(usuario);
+  senha = typeof senha === 'string' ? senha : '';
+
+  if (typeof usuario !== 'string' || usuario.length > 100 || !usuarioPermitido.test(usuario)) {
+    return redirectLogin(res, 'Usuario invalido.');
+  }
+
+  if (typeof senha !== 'string' || senha.length < 6 || senha.length > 128) {
+    return redirectLogin(res, 'Senha invalida.');
+  }
+
+  if (!process.env.JWT_SECRET) {
+    console.error('JWT_SECRET nao configurado.');
+    return redirectLogin(res, 'Erro interno no servidor.');
+  }
 
   try {
     const resultado = await pool.query(
@@ -13,59 +51,53 @@ const login = async (req, res) => {
     );
 
     if (resultado.rows.length === 0) {
-      return res.status(401).json({ mensagem: 'Usuário ou senha incorretos.' });
+      return redirectLogin(res, 'Usuario ou senha incorretos.');
     }
 
     const user = resultado.rows[0];
-
-    // verifica se a senha tem hash bcrypt
-    const temHash = user.senha.startsWith('$2');
+    const senhaBanco = typeof user.senha === 'string' ? user.senha : '';
+    const temHash = senhaBanco.startsWith('$2');
 
     if (!temHash) {
-      // senha em texto puro — verifica e pede pra definir
-      if (user.senha !== senha) {
-        return res.status(401).json({ mensagem: 'Usuário ou senha incorretos.' });
+      if (senhaBanco !== senha) {
+        return redirectLogin(res, 'Usuario ou senha incorretos.');
       }
 
-      return res.status(200).json({
-        primeiroacesso: true,
-        controle: user.controle,
-        mensagem: 'Defina sua senha para continuar.'
+      res.cookie('primeiro_acesso', String(user.controle), {
+        ...cookieOptions,
+        signed: true,
+        maxAge: 15 * 60 * 1000,
       });
+
+      return res.redirect(`${FRONTEND_URL}/definirSenha.html`);
     }
 
-    // senha com hash — fluxo normal
-    const senhaValida = await bcrypt.compare(senha, user.senha);
-
+    const senhaValida = await bcrypt.compare(senha, senhaBanco);
     if (!senhaValida) {
-      return res.status(401).json({ mensagem: 'Usuário ou senha incorretos.' });
+      return redirectLogin(res, 'Usuario ou senha incorretos.');
     }
 
     const token = jwt.sign(
       {
-        controle:    user.controle,
-        usuario:     user.usuario,
-        nome:        user.nome,
-        nivel:       user.nivel,
+        controle: user.controle,
+        usuario: user.usuario,
+        nome: user.nome,
+        nivel: user.nivel,
         programador: user.programador,
       },
       process.env.JWT_SECRET,
-      { expiresIn: '30d' }
+      { expiresIn: '1d' }
     );
 
-    return res.status(200).json({
-      mensagem: 'Login realizado com sucesso!',
-      token,
-      usuario: {
-        nome:        user.nome,
-        nivel:       user.nivel,
-        programador: user.programador,
-      }
+    res.cookie('token', token, {
+      ...cookieOptions,
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
+    return res.redirect(process.env.LOGIN_SUCCESS_REDIRECT || `${FRONTEND_URL}/`);
   } catch (err) {
     console.error('Erro no login:', err.message);
-    return res.status(500).json({ mensagem: 'Erro interno no servidor.' });
+    return redirectLogin(res, 'Erro interno no servidor.');
   }
 };
 

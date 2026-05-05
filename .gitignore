@@ -3,6 +3,8 @@ node_modules/
 
 # production
 /build
+react/build/
+react/.cache/
 
 # testing
 /coverage

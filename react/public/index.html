@@ -3,19 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Seja Bem-Vindo!</title>
+  <title>Acesso SGBR</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
-
-  <!-- lado esquerdo -->
   <section class="painel-logo" aria-label="Identidade da empresa">
     <div class="logo-wrapper">
       <img
-        src="../src/assets/logo-sgbr.png"
+        src="assets/logo-sgbr.png"
         alt="Logo SGBR"
         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
       >
@@ -23,22 +21,19 @@
 
       <div class="linha-decorativa"></div>
 
-      <h1>Precisa de um <em>Relatório</em> Personalizado?</h1>
-      <p>Cadastre aqui sua necessidade e acompanhe em tempo real como anda odesenvolvimento do mesmo!</p>
+      <h1>Precisa de um <em>Relatório</em> personalizado?</h1>
+      <p>Registre sua necessidade e acompanhe o desenvolvimento em tempo real.</p>
     </div>
   </section>
 
-  <!-- lado direito -->
   <aside class="painel-login" aria-label="Formulário de login">
     <div class="card-login" role="main">
-
       <header>
         <p class="saudacao">Bem-vindo</p>
         <h2>Acesse sua conta</h2>
       </header>
 
-      <form class="loginForm" id="loginForm" novalidate>
-
+      <form class="loginForm" id="loginForm" method="POST" action="http://localhost:3001/api/auth/" novalidate>
         <div class="campo">
           <label for="usuario">Nome de usuário</label>
           <input
@@ -47,6 +42,7 @@
             name="usuario"
             placeholder="seu.usuario"
             autocomplete="username"
+            maxlength="100"
             required
           >
         </div>
@@ -60,6 +56,7 @@
               name="senha"
               placeholder="••••••••"
               minlength="6"
+              maxlength="128"
               autocomplete="current-password"
               required
             >
@@ -77,18 +74,17 @@
         <div class="erro-msg" id="erroMsg" role="alert">
           Usuário ou senha incorretos. Tente novamente.
         </div>
-
       </form>
 
       <footer>
         <span>Precisa de acesso? Fale com o administrador.</span>
       </footer>
-
     </div>
 
     <p class="copyright">© 2026 Powered by Brendan Eich / Piccoli</p>
   </aside>
 
   <script src="js/login.js"></script>
+  <div id="root" hidden></div>
 </body>
 </html>
